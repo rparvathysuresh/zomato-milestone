@@ -50,7 +50,8 @@ export default function Home() {
     }, SLOW_THRESHOLD_MS);
 
     try {
-      const res = await fetch('/api/recommend', {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
+      const res = await fetch(`${apiUrl}/api/recommend`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(prefs),
