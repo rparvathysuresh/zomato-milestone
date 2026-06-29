@@ -154,12 +154,20 @@ export async function POST(request) {
           explanation: rec.explanation || '',
         }));
 
-      return NextResponse.json({
-        recommendations,
-        summary: llmResult.summary || '',
-        totalFiltered: filtered.length,
-        timestamp: new Date().toISOString(),
-      });
+      return NextResponse.json(
+        {
+          recommendations,
+          summary: llmResult.summary || '',
+          totalFiltered: filtered.length,
+          timestamp: new Date().toISOString(),
+        },
+        {
+          status: 200,
+          headers: {
+            'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
+          },
+        }
+      );
     } catch (llmErr) {
       console.error('[/api/recommend] LLM error:', llmErr.message);
 
